@@ -1,0 +1,522 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Admin Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid mt-4">
+
+    <!-- Header -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+                📊 Admin Dashboard
+            </h2>
+
+            <p class="text-muted mb-0">
+                Welcome Admin 👋
+            </p>
+
+        </div>
+
+        <div>
+
+            <a href="javascript:history.back()" class="btn btn-outline-dark">
+                <i class="bi bi-arrow-left"></i>
+                Back
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- Dashboard Cards -->
+
+    <div class="row g-4">
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card border-0 shadow-lg bg-primary text-white">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h6>Total Products</h6>
+
+                            <h2>{{ total_products }}</h2>
+
+                        </div>
+
+                        <i class="bi bi-box-seam fs-1"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card border-0 shadow-lg bg-success text-white">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h6>Categories</h6>
+
+                            <h2>{{ total_categories }}</h2>
+
+                        </div>
+
+                        <i class="bi bi-grid fs-1"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card border-0 shadow-lg bg-warning">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h6>Total Orders</h6>
+
+                            <h2>{{ total_orders }}</h2>
+
+                        </div>
+
+                        <i class="bi bi-cart-check fs-1"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card border-0 shadow-lg bg-danger text-white">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h6>Total Users</h6>
+
+                            <h2>{{ total_users }}</h2>
+
+                        </div>
+
+                        <i class="bi bi-people-fill fs-1"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="card border-0 shadow bg-info text-white">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h6>Wishlist</h6>
+
+                            <h2>{{ total_wishlist }}</h2>
+
+                        </div>
+
+                        <i class="bi bi-heart-fill fs-1"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="card border-0 shadow bg-secondary text-white">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h6>Reviews</h6>
+
+                            <h2>{{ total_reviews }}</h2>
+
+                        </div>
+
+                        <i class="bi bi-star-fill fs-1"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4 col-md-12">
+
+            <div class="card border-0 shadow bg-dark text-white">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h6>Total Sales</h6>
+
+                            <h2>₹ {{ total_sales }}</h2>
+
+                        </div>
+
+                        <i class="bi bi-currency-rupee fs-1"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Latest Orders -->
+
+    <div class="card shadow-lg border-0 mt-5">
+
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+
+            <h4 class="mb-0">
+                📦 Latest Orders
+            </h4>
+
+            <a href="{% url 'admin_orders' %}" class="btn btn-light btn-sm">
+
+                View All Orders
+
+            </a>
+
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle mb-0">
+
+                <thead class="table-light">
+
+                    <tr>
+
+                        <th>Invoice</th>
+                        <th>User</th>
+                        <th>Product</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for order in latest_orders %}
+
+                    <tr>
+
+                        <td>
+
+                            <strong>{{ order.invoice_no }}</strong>
+
+                        </td>
+
+                        <td>
+
+                            {{ order.user.username }}
+
+                        </td>
+
+                        <td>
+
+                            {{ order.product.name }}
+
+                        </td>
+
+                        <td class="text-success fw-bold">
+
+                            ₹{{ order.total }}
+
+                        </td>
+
+                        <td>
+
+                            {% if order.status == "Pending" %}
+
+                                <span class="badge bg-warning text-dark">
+
+                                    Pending
+
+                                </span>
+
+                            {% elif order.status == "Processing" %}
+
+                                <span class="badge bg-primary">
+
+                                    Processing
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-success">
+
+                                    Delivered
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            <a href="{% url 'order_detail' order.id %}"
+                               class="btn btn-sm btn-dark">
+
+                                View
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                {% empty %}
+
+                    <tr>
+
+                        <td colspan="6" class="text-center">
+
+                            No Orders Found
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <!-- LOW STOCK + RECENT USERS START -->
+
+    <!-- ================= ADMIN ACTIONS ================= -->
+
+    <div class="row mt-5">
+
+        <div class="col-12">
+
+            <div class="card shadow-lg border-0">
+
+                <div class="card-header bg-dark text-white">
+
+                    <h4 class="mb-0">
+                        ⚙ Quick Admin Actions
+                    </h4>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row g-3">
+
+                        <div class="col-lg-3 col-md-6">
+
+                            <a href="/admin/products/product/add/"
+                               class="btn btn-primary w-100 p-3">
+
+                                <i class="bi bi-plus-circle fs-4"></i>
+
+                                <br>
+
+                                Add Product
+
+                            </a>
+
+                        </div>
+
+                        <div class="col-lg-3 col-md-6">
+
+                            <a href="/admin/products/category/"
+                               class="btn btn-success w-100 p-3">
+
+                                <i class="bi bi-grid fs-4"></i>
+
+                                <br>
+
+                                Categories
+
+                            </a>
+
+                        </div>
+
+                        <div class="col-lg-3 col-md-6">
+
+                            <a href="/orders/admin-orders/"
+                               class="btn btn-warning w-100 p-3">
+
+                                <i class="bi bi-cart-check fs-4"></i>
+
+                                <br>
+
+                                Manage Orders
+
+                            </a>
+
+                        </div>
+
+                        <div class="col-lg-3 col-md-6">
+
+                            <a href="/admin/auth/user/"
+                               class="btn btn-danger w-100 p-3">
+
+                                <i class="bi bi-people fs-4"></i>
+
+                                <br>
+
+                                Manage Users
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= FOOTER INFO ================= -->
+
+    <div class="row mt-4">
+
+        <div class="col-12">
+
+            <div class="alert alert-info shadow">
+
+                <h5>
+                    📌 Dashboard Summary
+                </h5>
+
+                <hr>
+
+                <p class="mb-2">
+
+                    Total Products :
+                    <strong>{{ total_products }}</strong>
+
+                </p>
+
+                <p class="mb-2">
+
+                    Total Categories :
+                    <strong>{{ total_categories }}</strong>
+
+                </p>
+
+                <p class="mb-2">
+
+                    Registered Users :
+                    <strong>{{ total_users }}</strong>
+
+                </p>
+
+                <p class="mb-2">
+
+                    Total Orders :
+                    <strong>{{ total_orders }}</strong>
+
+                </p>
+
+                <p class="mb-2">
+
+                    Revenue :
+                    <strong class="text-success">
+
+                        ₹ {{ total_sales }}
+
+                    </strong>
+
+                </p>
+
+                <p class="mb-0">
+
+                    Last Updated :
+                    <strong>
+
+                        {% now "d M Y h:i A" %}
+
+                    </strong>
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

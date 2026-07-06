@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Edit Profile
+{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+
+    <a href="javascript:history.back()"
+       class="btn btn-outline-dark">
+
+        <i class="bi bi-arrow-left"></i>
+
+        Back
+
+    </a>
+
+</div>
+
+<div class="row justify-content-center mt-5">
+
+    <div class="col-md-6">
+
+        <div class="card shadow">
+
+            <div class="card-header bg-primary text-white">
+
+                <h3>
+
+                    ✏️ Edit Profile
+
+                </h3>
+
+            </div>
+
+            <div class="card-body">
+
+                {% if messages %}
+
+                    {% for message in messages %}
+
+                        <div class="alert alert-success alert-dismissible fade show">
+
+                            {{ message }}
+
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="alert">
+                            </button>
+
+                        </div>
+
+                    {% endfor %}
+
+                {% endif %}
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+
+                            First Name
+
+                        </label>
+
+                        {{ form.first_name }}
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+
+                            Last Name
+
+                        </label>
+
+                        {{ form.last_name }}
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+
+                            Email
+
+                        </label>
+
+                        {{ form.email }}
+
+                    </div>
+
+                    <button type="submit"
+                            class="btn btn-success">
+
+                        💾 Save Changes
+
+                    </button>
+
+                    <a href="{% url 'profile' %}"
+                       class="btn btn-secondary">
+
+                        Cancel
+
+                    </a>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

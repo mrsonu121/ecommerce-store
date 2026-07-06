@@ -1,0 +1,304 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Invoice
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="card shadow-lg border-0">
+
+        <div class="card-body p-5">
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <h2 class="fw-bold text-primary">
+
+                        🛒 E-Commerce Store
+
+                    </h2>
+
+                    <p class="mb-1">
+
+                        123 Main Market
+
+                    </p>
+
+                    <p class="mb-1">
+
+                        Bhopal, India
+
+                    </p>
+
+                    <p class="mb-1">
+
+                        support@ecommerce.com
+
+                    </p>
+
+                </div>
+
+                <div class="col-md-6 text-end">
+
+                    <h1 class="fw-bold">
+
+                        INVOICE
+
+                    </h1>
+
+                    <h5 class="text-muted">
+
+                        {{ order.invoice_no }}
+
+                    </h5>
+
+                </div>
+
+            </div>
+
+            <hr>
+
+            <div class="row mt-4">
+
+                <div class="col-md-6">
+
+                    <h5 class="fw-bold">
+
+                        Customer Details
+
+                    </h5>
+
+                    <p>
+
+                        <strong>Name :</strong>
+
+                        {{ order.user.username }}
+
+                    </p>
+
+                    <p>
+
+                        <strong>Email :</strong>
+
+                        {{ order.user.email }}
+
+                    </p>
+
+                </div>
+
+                <div class="col-md-6 text-md-end">
+
+                    <p>
+
+                        <strong>Invoice Date :</strong>
+
+                        {{ order.created_at|date:"d M Y" }}
+
+                    </p>
+
+                    <p>
+
+                        <strong>Status :</strong>
+
+                        {% if order.status == "Pending" %}
+
+                            <span class="badge bg-warning text-dark">
+
+                                Pending
+
+                            </span>
+
+                        {% elif order.status == "Processing" %}
+
+                            <span class="badge bg-primary">
+
+                                Processing
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-success">
+
+                                Delivered
+
+                            </span>
+
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="table-responsive mt-4">
+
+                <table class="table table-bordered">
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th>Product</th>
+
+                            <th>Price</th>
+
+                            <th>Quantity</th>
+
+                            <th>Total</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+
+                                {{ order.product.name }}
+
+                            </td>
+
+                            <td>
+
+                                ₹{{ order.price }}
+
+                            </td>
+
+                            <td>
+
+                                {{ order.quantity }}
+
+                            </td>
+
+                            <td>
+
+                                ₹{{ order.total }}
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <div class="row mt-4">
+
+                <div class="col-md-6">
+
+                    <h5>
+
+                        Thank You For Shopping ❤️
+
+                    </h5>
+
+                    <p class="text-muted">
+
+                        We appreciate your business.
+
+                        Please keep this invoice for your records.
+
+                    </p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <table class="table table-bordered">
+
+                        <tr>
+
+                            <th width="50%">
+
+                                Sub Total
+
+                            </th>
+
+                            <td>
+
+                                ₹{{ order.total }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Shipping
+
+                            </th>
+
+                            <td>
+
+                                ₹0.00
+
+                            </td>
+
+                        </tr>
+
+                        <tr class="table-success">
+
+                            <th>
+
+                                Grand Total
+
+                            </th>
+
+                            <th>
+
+                                ₹{{ order.total }}
+
+                            </th>
+
+                        </tr>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <hr>
+
+            <div class="text-center mt-4">
+
+                <button
+
+                    onclick="window.print()"
+
+                    class="btn btn-success me-2">
+
+                    🖨 Print Invoice
+
+                </button>
+
+                <a href="{% url 'my_orders' %}"
+
+                   class="btn btn-secondary">
+
+                    ← Back To My Orders
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

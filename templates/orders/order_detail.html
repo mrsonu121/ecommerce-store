@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Order Details
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <!-- Back Button -->
+
+    <div class="mb-4">
+
+        <a href="{% url 'admin_orders' %}"
+           class="btn btn-outline-dark">
+
+            <i class="bi bi-arrow-left"></i>
+
+            Back
+
+        </a>
+
+    </div>
+
+    <div class="card shadow">
+
+        <div class="card-header bg-dark text-white">
+
+            <h3 class="mb-0">
+
+                📦 Order Details
+
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-4 text-center">
+
+                    <img src="{{ order.product.image.url }}"
+                         class="img-fluid rounded shadow"
+                         style="max-height:300px; object-fit:cover;">
+
+                </div>
+
+                <div class="col-md-8">
+
+                    <table class="table table-bordered">
+
+                        <tr>
+                            <th width="35%">Invoice No</th>
+                            <td>{{ order.invoice_no }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Customer Username</th>
+                            <td>{{ order.user.username }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Full Name</th>
+                            <td>{{ order.full_name }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Phone</th>
+                            <td>{{ order.phone }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Email</th>
+                            <td>{{ order.email }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Address</th>
+                            <td>{{ order.address }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>City</th>
+                            <td>{{ order.city }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>State</th>
+                            <td>{{ order.state }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Pincode</th>
+                            <td>{{ order.pincode }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Country</th>
+                            <td>{{ order.country }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Product</th>
+                            <td>{{ order.product.name }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Price</th>
+                            <td>₹{{ order.price }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Quantity</th>
+                            <td>{{ order.quantity }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Total Amount</th>
+                            <td class="text-success fw-bold">
+
+                                ₹{{ order.total }}
+
+                            </td>
+                        </tr>
+
+                        <tr>
+
+                            <th>Status</th>
+
+                            <td>
+
+                                {% if order.status == "Pending" %}
+
+                                    <span class="badge bg-warning text-dark">
+
+                                        Pending
+
+                                    </span>
+
+                                {% elif order.status == "Processing" %}
+
+                                    <span class="badge bg-primary">
+
+                                        Processing
+
+                                    </span>
+
+                                {% elif order.status == "Delivered" %}
+
+                                    <span class="badge bg-success">
+
+                                        Delivered
+
+                                    </span>
+
+                                {% elif order.status == "Cancelled" %}
+
+                                    <span class="badge bg-danger">
+
+                                        Cancelled
+
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>Ordered On</th>
+
+                            <td>
+
+                                {{ order.created_at|date:"d M Y, h:i A" }}
+
+                            </td>
+
+                        </tr>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card shadow mt-4">
+
+        <div class="card-header bg-primary text-white">
+
+            <h4 class="mb-0">
+
+                🔄 Update Order Status
+
+            </h4>
+
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <button
+                    type="submit"
+                    class="btn btn-success">
+
+                    ✔ Update Status
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+
+{% block title %}
+Admin Chat
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid mt-4">
+
+    <div class="row">
+
+        <!-- ================= Customer List ================= -->
+
+        <div class="col-md-3 mb-3">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-dark text-white">
+
+                    <h4 class="mb-0">
+
+                        👥 Customers
+
+                    </h4>
+
+                </div>
+
+                <div class="list-group list-group-flush">
+
+                    {% for user in users %}
+
+                    <a href="?user={{ user.id }}"
+
+                       class="list-group-item list-group-item-action
+
+                       {% if selected_user and selected_user.id == user.id %}
+
+                       active
+
+                       {% endif %}">
+
+                        <div class="fw-bold">
+
+                            {{ user.username }}
+
+                        </div>
+
+                        <small>
+
+                            {{ user.email }}
+
+                        </small>
+
+                    </a>
+
+                    {% empty %}
+
+                    <div class="p-3 text-center">
+
+                        No Customers
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ================= Chat Section ================= -->
+
+        <div class="col-md-9">
+
+            {% if selected_user %}
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+
+                <h3>
+
+                    💬 Chat With {{ selected_user.username }}
+
+                </h3>
+
+                <a href="{% url 'dashboard' %}"
+
+                   class="btn btn-dark">
+
+                    ← Dashboard
+
+                </a>
+
+            </div>
+
+            {% else %}
+
+            <div class="alert alert-info">
+
+                Select a customer to start chatting.
+
+            </div>
+
+            {% endif %}
+
+            <div class="card shadow">
+
+                <div class="card-body"
+
+                     id="chat-box"
+
+                     style="height:500px; overflow-y:auto; background:#f8f9fa;">
+
+                    {% if chats %}
+
+                        {% for chat in chats %}
+
+                            {% if chat.sender == request.user %}
+
+                            <div class="text-end mb-3">
+
+                                <span class="badge bg-primary p-3 fs-6">
+
+                                    {{ chat.message }}
+
+                                </span>
+
+                                <br>
+
+                                <small class="text-muted">
+
+                                    {{ chat.created_at|date:"d M Y H:i" }}
+
+                                </small>
+
+                            </div>
+
+                            {% else %}
+
+                            <div class="text-start mb-3">
+
+                                <span class="badge bg-success p-3 fs-6">
+
+                                    {{ chat.message }}
+
+                                </span>
+
+                                <br>
+
+                                <small class="text-muted">
+
+                                    {{ chat.created_at|date:"d M Y H:i" }}
+
+                                </small>
+
+                            </div>
+
+                            {% endif %}
+
+                        {% endfor %}
+
+                    {% else %}
+
+                    <div class="text-center mt-5 text-muted">
+
+                        No Messages Yet
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+                {% if selected_user %}
+
+                <div class="card-footer">
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        <div class="input-group">
+
+                            <input
+
+                                type="text"
+
+                                name="message"
+
+                                class="form-control"
+
+                                placeholder="Type your reply..."
+
+                                required>
+
+                            <button
+
+                                class="btn btn-primary">
+
+                                <i class="bi bi-send-fill"></i>
+
+                                Send
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+var chatBox = document.getElementById("chat-box");
+
+if(chatBox){
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+}
+
+setTimeout(function(){
+
+    location.reload();
+
+},5000);
+
+</script>
+
+{% endblock %}

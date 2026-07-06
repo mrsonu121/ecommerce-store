@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+
+<div class="mb-4">
+
+    <a href="javascript:history.back()"
+       class="btn btn-outline-dark">
+
+        <i class="bi bi-arrow-left"></i>
+
+        Back
+
+    </a>
+
+</div>
+
+<!-- Search Bar -->
+
+<div class="row mb-4">
+
+    <div class="col-md-6 mx-auto">
+
+        <form method="GET">
+
+            <div class="input-group">
+
+                <input
+                    type="text"
+                    name="q"
+                    class="form-control"
+                    placeholder="Search Products..."
+                    value="{{ query|default:'' }}">
+
+                <button class="btn btn-dark">
+
+                    <i class="bi bi-search"></i>
+
+                    Search
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- Category Buttons -->
+
+<div class="text-center mb-4">
+
+    <a href="{% url 'home' %}"
+       class="btn btn-dark m-1">
+
+        All
+
+    </a>
+
+    {% for category in categories %}
+
+    <a href="?category={{ category.id }}"
+       class="btn btn-outline-dark m-1">
+
+        {{ category.name }}
+
+    </a>
+
+    {% endfor %}
+
+</div>
+
+<!-- Heading -->
+
+<h2 class="mb-4 text-center">
+
+    🛍 Latest Products
+
+</h2>
+
+{% if products %}
+
+<div class="row">
+
+{% for product in products %}
+
+<div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+
+    <div class="card h-100 shadow">
+
+        <img
+            src="{{ product.image.url }}"
+            class="card-img-top"
+            height="220"
+            style="object-fit:cover;">
+
+        <div class="card-body text-center">
+
+            <!-- Category -->
+
+            <span class="badge bg-secondary mb-2">
+
+                {{ product.category.name }}
+
+            </span>
+
+            <h5>
+
+                {{ product.name }}
+
+            </h5>
+
+            <h4 class="text-success">
+
+                ₹{{ product.price }}
+
+            </h4>
+
+            <!-- Stock Badge -->
+
+            {% if product.stock > 5 %}
+
+                <span class="badge bg-success mb-3">
+
+                    ✅ In Stock
+
+                </span>
+
+            {% elif product.stock > 0 %}
+
+                <span class="badge bg-warning text-dark mb-3">
+
+                    ⚠ Only {{ product.stock }} Left
+
+                </span>
+
+            {% else %}
+
+                <span class="badge bg-danger mb-3">
+
+                    ❌ Out of Stock
+
+                </span>
+
+            {% endif %}
+
+            <br>
+
+            <!-- View Details -->
+
+            <a href="{% url 'product_detail' product.id %}"
+               class="btn btn-primary w-100 mb-2">
+
+                View Details
+
+            </a>
+
+            <!-- Add To Cart -->
+
+            {% if product.stock > 0 %}
+
+                <a href="{% url 'add_to_cart' product.id %}"
+                   class="btn btn-success w-100">
+
+                    🛒 Add To Cart
+
+                </a>
+
+            {% else %}
+
+                <button
+                    class="btn btn-secondary w-100"
+                    disabled>
+
+                    Out of Stock
+
+                </button>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% else %}
+
+<div class="alert alert-warning text-center">
+
+    <h4>
+
+        😔 No Products Found
+
+    </h4>
+
+    <a href="{% url 'home' %}"
+       class="btn btn-primary mt-2">
+
+        Show All Products
+
+    </a>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

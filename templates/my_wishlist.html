@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Wishlist
+{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+
+    <a href="javascript:history.back()"
+       class="btn btn-outline-dark">
+
+        <i class="bi bi-arrow-left"></i>
+
+        Back
+
+    </a>
+
+</div>
+<h2 class="mb-4">
+
+❤️ My Wishlist
+
+</h2>
+
+<div class="row">
+
+{% for item in wishlist %}
+
+<div class="col-md-3 mb-4">
+
+<div class="card h-100">
+
+<img src="{{ item.product.image.url }}"
+class="card-img-top"
+height="220">
+
+<div class="card-body">
+
+<h5>
+
+{{ item.product.name }}
+
+</h5>
+
+<h4>
+
+₹{{ item.product.price }}
+
+</h4>
+
+<a href="{% url 'product_detail' item.product.id %}"
+class="btn btn-primary w-100 mb-2">
+
+View Product
+
+</a>
+
+<a href="{% url 'remove_wishlist' item.id %}"
+class="btn btn-danger w-100">
+
+Remove
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+{% empty %}
+
+<div class="alert alert-warning">
+
+No Wishlist Products
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endblock %}

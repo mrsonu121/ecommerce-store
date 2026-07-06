@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Checkout
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="row">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-dark text-white">
+
+                    <h3>📦 Delivery Address</h3>
+
+                </div>
+
+                <div class="card-body">
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+                                {{ form.full_name.label_tag }}
+                                {{ form.full_name }}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                {{ form.phone.label_tag }}
+                                {{ form.phone }}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                {{ form.email.label_tag }}
+                                {{ form.email }}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                {{ form.country.label_tag }}
+                                {{ form.country }}
+                            </div>
+
+                            <div class="col-12 mb-3">
+                                {{ form.address.label_tag }}
+                                {{ form.address }}
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                {{ form.city.label_tag }}
+                                {{ form.city }}
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                {{ form.state.label_tag }}
+                                {{ form.state }}
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                {{ form.pincode.label_tag }}
+                                {{ form.pincode }}
+                            </div>
+
+                        </div>
+
+                        <button class="btn btn-success btn-lg w-100">
+
+                            ✅ Place Order
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h4>🛒 Order Summary</h4>
+
+                </div>
+
+                <div class="card-body">
+
+                    {% for item in cart_items %}
+
+                        <div class="d-flex justify-content-between mb-2">
+
+                            <span>
+
+                                {{ item.product.name }}
+
+                                × {{ item.quantity }}
+
+                            </span>
+
+                            <strong>
+
+                                ₹{{ item.total_price }}
+
+                            </strong>
+
+                        </div>
+
+                    {% endfor %}
+
+                    <hr>
+
+                    <h4 class="text-success">
+
+                        Total : ₹{{ total }}
+
+                    </h4>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,256 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Invoice
+{% endblock %}
+
+{% block content %}
+
+<div class="mb-4">
+
+    <a href="javascript:history.back()"
+       class="btn btn-outline-dark">
+
+        <i class="bi bi-arrow-left"></i>
+
+        Back
+
+    </a>
+
+</div>
+
+<div class="card shadow">
+
+    <div class="card-header bg-dark text-white">
+
+        <div class="d-flex justify-content-between">
+
+            <h2>
+
+                🧾 Invoice
+
+            </h2>
+
+            <button
+                onclick="window.print()"
+                class="btn btn-light">
+
+                🖨 Print
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row mb-4">
+
+            <div class="col-md-6">
+
+                <h4>
+
+                    🛒 E-Commerce Store
+
+                </h4>
+
+                <p>
+
+                    Thank You For Shopping ❤️
+
+                </p>
+
+            </div>
+
+            <div class="col-md-6 text-end">
+
+                <h5>
+
+                    Invoice No :
+
+                    <strong>
+
+                        {{ order.invoice_no }}
+
+                    </strong>
+
+                </h5>
+
+                <h6>
+
+                    Date :
+
+                    {{ order.created_at|date:"d M Y" }}
+
+                </h6>
+
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="row mb-4">
+
+            <div class="col-md-6">
+
+                <h5>
+
+                    Customer Details
+
+                </h5>
+
+                <p>
+
+                    <strong>Name :</strong>
+
+                    {{ order.user.get_full_name }}
+
+                </p>
+
+                <p>
+
+                    <strong>Username :</strong>
+
+                    {{ order.user.username }}
+
+                </p>
+
+                <p>
+
+                    <strong>Email :</strong>
+
+                    {{ order.user.email }}
+
+                </p>
+
+            </div>
+
+            <div class="col-md-6 text-end">
+
+                <h5>
+
+                    Order Status
+
+                </h5>
+
+                {% if order.status == "Pending" %}
+
+                <span class="badge bg-warning text-dark">
+
+                    Pending
+
+                </span>
+
+                {% elif order.status == "Processing" %}
+
+                <span class="badge bg-primary">
+
+                    Processing
+
+                </span>
+
+                {% else %}
+
+                <span class="badge bg-success">
+
+                    Delivered
+
+                </span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        <table class="table table-bordered text-center">
+
+            <thead class="table-dark">
+
+                <tr>
+
+                    <th>Product</th>
+
+                    <th>Price</th>
+
+                    <th>Quantity</th>
+
+                    <th>Total</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr>
+
+                    <td>
+
+                        {{ order.product.name }}
+
+                    </td>
+
+                    <td>
+
+                        ₹{{ order.price }}
+
+                    </td>
+
+                    <td>
+
+                        {{ order.quantity }}
+
+                    </td>
+
+                    <td>
+
+                        <strong>
+
+                            ₹{{ order.total }}
+
+                        </strong>
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+        <div class="text-end mt-4">
+
+            <h3 class="text-success">
+
+                Grand Total : ₹{{ order.total }}
+
+            </h3>
+
+        </div>
+
+        <hr>
+
+        <div class="text-center mt-4">
+
+            <h5>
+
+                🎉 Thank You For Shopping With Us!
+
+            </h5>
+
+            <p>
+
+                We hope to see you again.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

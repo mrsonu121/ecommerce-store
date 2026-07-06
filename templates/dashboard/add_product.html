@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+
+{% block title %}
+Add Product
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-lg border-0">
+
+                <div class="card-header bg-success text-white">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <h3 class="mb-0">
+                            ➕ Add New Product
+                        </h3>
+
+                        <a href="{% url 'product_list' %}"
+                           class="btn btn-light btn-sm">
+
+                            ← Back
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <div class="card-body">
+
+                    <form method="POST"
+                          enctype="multipart/form-data">
+
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Category
+
+                            </label>
+
+                            {{ form.category }}
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Product Name
+
+                            </label>
+
+                            {{ form.name }}
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Price
+
+                            </label>
+
+                            {{ form.price }}
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Stock
+
+                            </label>
+
+                            {{ form.stock }}
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Description
+
+                            </label>
+
+                            {{ form.description }}
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Product Image
+
+                            </label>
+
+                            {{ form.image }}
+                        </div>
+
+                        <div class="mb-3 text-center">
+
+                            <img
+                                id="preview"
+                                src=""
+                                style="max-width:250px;display:none;"
+                                class="img-thumbnail">
+
+                        </div>
+
+                        <button class="btn btn-success">
+
+                            ✔ Save Product
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+document.getElementById("id_image").onchange = function(e){
+
+    let reader = new FileReader();
+
+    reader.onload = function(){
+
+        let img = document.getElementById("preview");
+
+        img.src = reader.result;
+
+        img.style.display = "block";
+
+    }
+
+    reader.readAsDataURL(e.target.files[0]);
+
+}
+
+</script>
+
+{% endblock %}

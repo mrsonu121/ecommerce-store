@@ -1,0 +1,280 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Track Order
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <!-- Back Button -->
+
+    <div class="mb-4">
+
+        <a href="javascript:history.back()"
+           class="btn btn-outline-dark">
+
+            <i class="bi bi-arrow-left"></i>
+
+            Back
+
+        </a>
+
+    </div>
+
+    <div class="card shadow">
+
+        <div class="card-header bg-dark text-white">
+
+            <h3 class="mb-0">
+
+                📦 Order Tracking
+
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row mb-4">
+
+                <div class="col-md-6">
+
+                    <h4>
+
+                        Invoice :
+                        <strong>{{ order.invoice_no }}</strong>
+
+                    </h4>
+
+                    <h5>
+
+                        Product :
+                        {{ order.product.name }}
+
+                    </h5>
+
+                </div>
+
+                <div class="col-md-6 text-md-end">
+
+                    <h5>
+
+                        Order Date
+
+                    </h5>
+
+                    <p>
+
+                        {{ order.created_at|date:"d M Y, h:i A" }}
+
+                    </p>
+
+                    {% if order.status == "Pending" %}
+
+                        <span class="badge bg-warning text-dark fs-6">
+
+                            Pending
+
+                        </span>
+
+                    {% elif order.status == "Processing" %}
+
+                        <span class="badge bg-primary fs-6">
+
+                            Processing
+
+                        </span>
+
+                    {% elif order.status == "Shipped" %}
+
+                        <span class="badge bg-info fs-6">
+
+                            Shipped
+
+                        </span>
+
+                    {% elif order.status == "Out For Delivery" %}
+
+                        <span class="badge bg-secondary fs-6">
+
+                            Out For Delivery
+
+                        </span>
+
+                    {% elif order.status == "Delivered" %}
+
+                        <span class="badge bg-success fs-6">
+
+                            Delivered
+
+                        </span>
+
+                    {% elif order.status == "Cancelled" %}
+
+                        <span class="badge bg-danger fs-6">
+
+                            Cancelled
+
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            <hr>
+
+            <div class="ps-3">
+
+                <!-- Order Placed -->
+
+                <div class="mb-4">
+
+                    {% if order.status != "Cancelled" %}
+
+                        <span class="badge bg-success p-2">
+
+                            ✔ Order Placed
+
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-secondary p-2">
+
+                            Order Placed
+
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+                <div class="ms-3 border-start ps-4">
+
+                    <!-- Processing -->
+
+                    <div class="mb-4">
+
+                        {% if order.status == "Processing" or order.status == "Shipped" or order.status == "Out For Delivery" or order.status == "Delivered" %}
+
+                            <span class="badge bg-success p-2">
+
+                                ✔ Processing
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-secondary p-2">
+
+                                Processing
+
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                    <!-- Shipped -->
+
+                    <div class="mb-4">
+
+                        {% if order.status == "Shipped" or order.status == "Out For Delivery" or order.status == "Delivered" %}
+
+                            <span class="badge bg-success p-2">
+
+                                ✔ Shipped
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-secondary p-2">
+
+                                Shipped
+
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                    <!-- Out For Delivery -->
+
+                    <div class="mb-4">
+
+                        {% if order.status == "Out For Delivery" or order.status == "Delivered" %}
+
+                            <span class="badge bg-success p-2">
+
+                                ✔ Out For Delivery
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-secondary p-2">
+
+                                Out For Delivery
+
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                    <!-- Delivered -->
+
+                    <div class="mb-4">
+
+                        {% if order.status == "Delivered" %}
+
+                            <span class="badge bg-success p-2">
+
+                                ✔ Delivered
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-secondary p-2">
+
+                                Delivered
+
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                    <!-- Cancelled -->
+
+                    {% if order.status == "Cancelled" %}
+
+                    <div class="mb-4">
+
+                        <span class="badge bg-danger p-2">
+
+                            ❌ Order Cancelled
+
+                        </span>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
