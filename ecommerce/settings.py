@@ -20,7 +20,7 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["*", "localhost", "127.0.0.1"]
 
 
 # ===================================================
@@ -161,6 +161,7 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
 # ===================================================
@@ -182,6 +183,14 @@ CLOUDINARY_STORAGE = {
     "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
 }
 
+CLOUDINARY_ENABLED = all(
+    [
+        CLOUDINARY_STORAGE["CLOUD_NAME"],
+        CLOUDINARY_STORAGE["API_KEY"],
+        CLOUDINARY_STORAGE["API_SECRET"],
+    ]
+)
+
 
 # ===================================================
 # DJANGO 6 STORAGES
@@ -189,7 +198,11 @@ CLOUDINARY_STORAGE = {
 
 STORAGES = {
     "default": {
-        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+        "BACKEND": (
+            "cloudinary_storage.storage.MediaCloudinaryStorage"
+            if CLOUDINARY_ENABLED
+            else "django.core.files.storage.FileSystemStorage"
+        ),
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
@@ -221,3 +234,13 @@ EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# Render / production settings
+if os.environ.get("RENDER"):
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SECURE_SSL_REDIRECT = True
+    CSRF_TRUSTED_ORIGINS = [
+        os.environ.get("RENDER_EXTERNAL_URL", "").rstrip("/"),
+    ]
+    if not CSRF_TRUSTED_ORIGINS[0]:
+        CSRF_TRUSTED_ORIGINS = []
