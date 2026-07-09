@@ -63,6 +63,7 @@ Login
                             type="text"
                             name="username"
                             class="form-control"
+                            value="{{ request.POST.username|default_if_none:'' }}"
                             required>
 
                     </div>

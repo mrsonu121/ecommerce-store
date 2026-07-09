@@ -55,15 +55,43 @@ def login_user(request):
 
     if request.method == "POST":
 
-        username = request.POST.get("username")
+        login_input = request.POST.get("username", "").strip()
 
-        password = request.POST.get("password")
+        password = request.POST.get("password", "").strip()
 
-        user = authenticate(
-            request,
-            username=username,
-            password=password
-        )
+        user = None
+
+        if login_input and password:
+
+            user_obj = None
+
+            if "@" in login_input:
+
+                user_obj = User.objects.filter(
+                    email__iexact=login_input
+                ).first()
+
+            if user_obj is None:
+
+                user_obj = User.objects.filter(
+                    username__iexact=login_input
+                ).first()
+
+            if user_obj is not None:
+
+                user = authenticate(
+                    request,
+                    username=user_obj.username,
+                    password=password
+                )
+
+            else:
+
+                user = authenticate(
+                    request,
+                    username=login_input,
+                    password=password
+                )
 
         if user is not None:
 
@@ -71,12 +99,10 @@ def login_user(request):
 
             return redirect("home")
 
-        else:
-
-            messages.error(
-                request,
-                "Invalid Username or Password"
-            )
+        messages.error(
+            request,
+            "Invalid Username or Password"
+        )
 
     return render(
         request,
