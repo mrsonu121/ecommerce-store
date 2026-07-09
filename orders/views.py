@@ -11,7 +11,7 @@ from django.conf import settings
 
 from cart.models import Cart
 from .models import Order
-from .forms import OrderStatusForm, CheckoutForm
+from .forms import OrderStatusForm, CheckoutForm, CancelOrderForm
 
 
 # ==========================
@@ -423,19 +423,38 @@ def cancel_order(request, pk):
 
         return redirect("my_orders")
 
-    # Stock wapas add karo
-    order.product.stock += order.quantity
-    order.product.save()
+    if request.method == "POST":
 
-    order.status = "Cancelled"
-    order.save()
+        form = CancelOrderForm(request.POST, instance=order)
 
-    messages.success(
+        if form.is_valid():
+
+            order.product.stock += order.quantity
+            order.product.save()
+
+            order.status = "Cancelled"
+            order.cancel_reason = form.cleaned_data["cancel_reason"]
+            order.save()
+
+            messages.success(
+                request,
+                "Order Cancelled Successfully."
+            )
+
+            return redirect("my_orders")
+
+    else:
+
+        form = CancelOrderForm()
+
+    return render(
         request,
-        "Order Cancelled Successfully."
+        "orders/cancel_order.html",
+        {
+            "order": order,
+            "form": form
+        }
     )
-
-    return redirect("my_orders")
 
 
 @login_required

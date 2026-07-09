@@ -20,11 +20,12 @@ def dashboard(request):
     total_products = Product.objects.count()
     total_categories = Category.objects.count()
     total_users = User.objects.count()
-    total_orders = Order.objects.count()
+    total_orders = Order.objects.exclude(status="Cancelled").count()
+    cancelled_orders = Order.objects.filter(status="Cancelled").count()
     total_reviews = Review.objects.count()
     total_wishlist = Wishlist.objects.count()
 
-    total_sales = sum(order.total for order in Order.objects.all())
+    total_sales = sum(order.total for order in Order.objects.exclude(status="Cancelled"))
 
     latest_orders = Order.objects.order_by("-created_at")[:5]
 

@@ -147,6 +147,22 @@ Order Details
 
                                     </span>
 
+                                {% elif order.status == "Shipped" %}
+
+                                    <span class="badge bg-info text-dark">
+
+                                        Shipped
+
+                                    </span>
+
+                                {% elif order.status == "Out For Delivery" %}
+
+                                    <span class="badge bg-secondary text-white">
+
+                                        Out For Delivery
+
+                                    </span>
+
                                 {% elif order.status == "Delivered" %}
 
                                     <span class="badge bg-success">
@@ -168,6 +184,14 @@ Order Details
                             </td>
 
                         </tr>
+                        {% if order.cancel_reason %}
+                        <tr>
+                            <th>Cancel Reason</th>
+                            <td class="text-danger">
+                                {{ order.cancel_reason }}
+                            </td>
+                        </tr>
+                        {% endif %}
 
                         <tr>
 

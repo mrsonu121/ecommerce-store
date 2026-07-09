@@ -97,6 +97,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "context_processors.cart_count",
+                "context_processors.chat_notifications",
             ],
         },
     },

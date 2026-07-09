@@ -54,6 +54,11 @@ class Order(models.Model):
         default='Pending'
     )
 
+    cancel_reason = models.TextField(
+        blank=True,
+        default=""
+    )
+
     # ==========================
     # Customer Delivery Details
     # ==========================

@@ -39,6 +39,12 @@ def customer_chat(request):
 
             return redirect("customer_chat")
 
+    ChatMessage.objects.filter(
+        sender=admin,
+        receiver=request.user,
+        is_read=False
+    ).update(is_read=True)
+
     chats = ChatMessage.objects.filter(
 
         sender=request.user,
@@ -120,6 +126,12 @@ def admin_chat(request):
                 )
 
                 return redirect(f"/chat/admin/?user={selected_user.id}")
+
+        ChatMessage.objects.filter(
+            sender=selected_user,
+            receiver=request.user,
+            is_read=False
+        ).update(is_read=True)
 
         chats = ChatMessage.objects.filter(
 

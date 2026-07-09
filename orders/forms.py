@@ -164,3 +164,34 @@ class OrderStatusForm(forms.ModelForm):
             )
 
         }
+
+
+class CancelOrderForm(forms.ModelForm):
+
+    class Meta:
+
+        model = Order
+
+        fields = [
+
+            "cancel_reason"
+
+        ]
+
+        widgets = {
+
+            "cancel_reason": forms.Textarea(
+
+                attrs={
+
+                    "class": "form-control",
+
+                    "rows": 4,
+
+                    "placeholder": "Please tell us why you are cancelling this order."
+
+                }
+
+            )
+
+        }

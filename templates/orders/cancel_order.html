@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Cancel Order
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-6">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-danger text-white">
+
+                    <h3 class="mb-0">
+
+                        ❌ Cancel Order
+
+                    </h3>
+
+                </div>
+
+                <div class="card-body">
+
+                    <p>
+
+                        Invoice : <strong>{{ order.invoice_no }}</strong>
+
+                    </p>
+
+                    <p>
+
+                        Product : <strong>{{ order.product.name }}</strong>
+
+                    </p>
+
+                    <p>
+
+                        Total Amount : <strong>₹{{ order.total }}</strong>
+
+                    </p>
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        {{ form.as_p }}
+
+                        <button type="submit" class="btn btn-danger w-100">
+
+                            Confirm Cancel Order
+
+                        </button>
+
+                    </form>
+
+                    <div class="mt-3 text-center">
+
+                        <a href="{% url 'my_orders' %}" class="btn btn-outline-dark">
+
+                            <i class="bi bi-arrow-left"></i>
+
+                            Back to Orders
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

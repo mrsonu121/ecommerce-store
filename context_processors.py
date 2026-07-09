@@ -15,3 +15,21 @@ def cart_count(request):
     return {
         'cart_count': count
     }
+
+
+def chat_notifications(request):
+
+    unread_count = 0
+
+    if request.user.is_authenticated:
+
+        from chat.models import ChatMessage
+
+        unread_count = ChatMessage.objects.filter(
+            receiver=request.user,
+            is_read=False
+        ).count()
+
+    return {
+        'chat_notifications': unread_count
+    }
