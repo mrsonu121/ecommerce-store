@@ -144,7 +144,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+# Use local timezone for correct order times (e.g., India)
+TIME_ZONE = "Asia/Kolkata"
 
 USE_I18N = True
 

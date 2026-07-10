@@ -67,7 +67,7 @@ Track Order
 
                     <p>
 
-                        {{ order.created_at|date:"d M Y, h:i A" }}
+                        {{ order.created_at|localtime|date:"d M Y, h:i A" }}
 
                     </p>
 

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load tz %}
 
 {% block title %}
 My Orders
@@ -173,7 +174,7 @@ My Orders
 
                     <td>
 
-                        {{ order.created_at|date:"d M Y h:i A" }}
+                        {{ order.created_at|localtime|date:"d M Y h:i A" }}
 
                     </td>
 

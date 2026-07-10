@@ -34,7 +34,7 @@ Customer Support
 
                         <small class="text-muted">
 
-                            {{ chat.created_at|date:"d M Y H:i" }}
+                            {{ chat.created_at|localtime|date:"d M Y H:i" }}
 
                         </small>
 
@@ -54,7 +54,7 @@ Customer Support
 
                         <small class="text-muted">
 
-                            {{ chat.created_at|date:"d M Y H:i" }}
+                            {{ chat.created_at|localtime|date:"d M Y H:i" }}
 
                         </small>
 

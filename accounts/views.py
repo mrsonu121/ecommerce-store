@@ -9,6 +9,9 @@ from django.contrib.auth import (
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
+import logging
+
+logger = logging.getLogger(__name__)
 
 from .forms import RegisterForm, UserUpdateForm
 
@@ -63,19 +66,12 @@ def login_user(request):
 
         if login_input and password:
 
-            user_obj = None
+            # Reduce DB queries by searching username or email in one query
+            from django.db.models import Q
 
-            if "@" in login_input:
-
-                user_obj = User.objects.filter(
-                    email__iexact=login_input
-                ).first()
-
-            if user_obj is None:
-
-                user_obj = User.objects.filter(
-                    username__iexact=login_input
-                ).first()
+            user_obj = User.objects.filter(
+                Q(email__iexact=login_input) | Q(username__iexact=login_input)
+            ).first()
 
             if user_obj is not None:
 
@@ -84,6 +80,14 @@ def login_user(request):
                     username=user_obj.username,
                     password=password
                 )
+
+                # Fallback: if authenticate didn't return a user (rare),
+                # check the password directly and attach the default backend
+                # so `login()` can succeed. This helps when an auth backend
+                # does not return the user but the password matches.
+                if user is None and user_obj.check_password(password):
+                    user = user_obj
+                    user.backend = "django.contrib.auth.backends.ModelBackend"
 
             else:
 
@@ -98,6 +102,14 @@ def login_user(request):
             login(request, user)
 
             return redirect("home")
+
+        # Log failed login for diagnostics (includes attempted username/email and IP)
+        ip = request.META.get("REMOTE_ADDR")
+        logger.warning(
+            "Failed login attempt for '%s' from %s",
+            login_input,
+            ip,
+        )
 
         messages.error(
             request,

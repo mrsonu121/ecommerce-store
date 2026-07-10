@@ -81,7 +81,7 @@ Invoice
 
                     Date :
 
-                    {{ order.created_at|date:"d M Y" }}
+                    {{ order.created_at|localtime|date:"d M Y" }}
 
                 </h6>
 
