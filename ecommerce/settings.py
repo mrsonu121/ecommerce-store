@@ -41,7 +41,7 @@ INSTALLED_APPS = [
 
     # Apps
     "products",
-    "accounts",
+    "accounts.apps.AccountsConfig",
     "cart",
     "orders",
     "wishlist",

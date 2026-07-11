@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load tz %}
 
 {% block title %}
 Invoice
@@ -274,6 +275,14 @@ Invoice
             <hr>
 
             <div class="text-center mt-4">
+
+                <a href="{% url 'download_invoice' order.id %}"
+
+                   class="btn btn-primary me-2">
+
+                    📥 Download Invoice PDF
+
+                </a>
 
                 <button
 

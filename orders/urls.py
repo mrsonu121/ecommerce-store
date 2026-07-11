@@ -25,6 +25,12 @@ urlpatterns = [
         name="invoice"
     ),
 
+    path(
+        "invoice/<int:pk>/download/",
+        views.download_invoice,
+        name="download_invoice"
+    ),
+
     # ==========================
     # Admin
     # ==========================
