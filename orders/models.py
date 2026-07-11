@@ -6,23 +6,17 @@ from products.models import Product
 class Order(models.Model):
 
     STATUS_CHOICES = (
-        ('Pending', 'Pending'),
-        ('Processing', 'Processing'),
-        ('Delivered', 'Delivered'),
-        ('Cancelled', 'Cancelled'),
-         ('Pending', 'Pending'),
+        ("Pending", "Pending"),
+        ("Processing", "Processing"),
+        ("Shipped", "Shipped"),
+        ("Out For Delivery", "Out For Delivery"),
+        ("Delivered", "Delivered"),
+        ("Cancelled", "Cancelled"),
+    )
 
-        ('Processing', 'Processing'),
-
-        ('Shipped', 'Shipped'),
-
-        ('Out For Delivery', 'Out For Delivery'),
-
-        ('Delivered', 'Delivered'),
-
-        ('Cancelled', 'Cancelled'),
-
- )
+    # ==========================
+    # User & Product
+    # ==========================
 
     user = models.ForeignKey(
         User,
@@ -48,10 +42,14 @@ class Order(models.Model):
         decimal_places=2
     )
 
+    # ==========================
+    # Order Status
+    # ==========================
+
     status = models.CharField(
-        max_length=20,
+        max_length=30,
         choices=STATUS_CHOICES,
-        default='Pending'
+        default="Pending"
     )
 
     cancel_reason = models.TextField(
@@ -60,7 +58,7 @@ class Order(models.Model):
     )
 
     # ==========================
-    # Customer Delivery Details
+    # Customer Details
     # ==========================
 
     full_name = models.CharField(
@@ -102,7 +100,7 @@ class Order(models.Model):
     )
 
     # ==========================
-    # Invoice Number
+    # Invoice
     # ==========================
 
     invoice_no = models.CharField(
@@ -115,15 +113,29 @@ class Order(models.Model):
         auto_now_add=True
     )
 
+    updated_at = models.DateTimeField(
+        auto_now=True
+    )
+
+    # ==========================
+    # Save Invoice Number
+    # ==========================
+
     def save(self, *args, **kwargs):
+
+        creating = self.pk is None
 
         super().save(*args, **kwargs)
 
-        if not self.invoice_no:
+        if creating and not self.invoice_no:
 
             self.invoice_no = f"INV{self.id:05d}"
 
             super().save(update_fields=["invoice_no"])
+
+    # ==========================
+    # String
+    # ==========================
 
     def __str__(self):
 

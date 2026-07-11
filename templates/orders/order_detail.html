@@ -9,12 +9,18 @@ Order Details
 
 <div class="container mt-4">
 
-    <!-- Back Button -->
+    <!-- Header -->
 
-    <div class="mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2 class="fw-bold">
+
+            📦 Order Details
+
+        </h2>
 
         <a href="{% url 'admin_orders' %}"
-           class="btn btn-outline-dark">
+           class="btn btn-dark">
 
             <i class="bi bi-arrow-left"></i>
 
@@ -24,15 +30,72 @@ Order Details
 
     </div>
 
-    <div class="card shadow">
+    <!-- Main Card -->
+
+    <div class="card shadow-lg border-0">
 
         <div class="card-header bg-dark text-white">
 
-            <h3 class="mb-0">
+            <div class="d-flex justify-content-between align-items-center">
 
-                📦 Order Details
+                <h4 class="mb-0">
 
-            </h3>
+                    Invoice :
+                    {{ order.invoice_no }}
+
+                </h4>
+
+                {% if order.status == "Pending" %}
+
+                    <span class="badge bg-warning text-dark fs-6">
+
+                        Pending
+
+                    </span>
+
+                {% elif order.status == "Processing" %}
+
+                    <span class="badge bg-primary fs-6">
+
+                        Processing
+
+                    </span>
+
+                {% elif order.status == "Shipped" %}
+
+                    <span class="badge bg-info text-dark fs-6">
+
+                        Shipped
+
+                    </span>
+
+                {% elif order.status == "Out For Delivery" %}
+
+                    <span class="badge bg-secondary fs-6">
+
+                        Out For Delivery
+
+                    </span>
+
+                {% elif order.status == "Delivered" %}
+
+                    <span class="badge bg-success fs-6">
+
+                        Delivered
+
+                    </span>
+
+                {% elif order.status == "Cancelled" %}
+
+                    <span class="badge bg-danger fs-6">
+
+                        Cancelled
+
+                    </span>
+
+                {% endif %}
+
+            </div>
 
         </div>
 
@@ -40,173 +103,514 @@ Order Details
 
             <div class="row">
 
-                <div class="col-md-4 text-center">
+                <!-- Product Image -->
 
-                    <img src="{{ order.product.image.url }}"
-                         class="img-fluid rounded shadow"
-                         style="max-height:300px; object-fit:cover;">
+                <div class="col-lg-4">
+
+                    <div class="card shadow-sm">
+
+                        <img src="{{ order.product.image.url }}"
+                             class="card-img-top"
+                             style="height:330px;object-fit:cover;">
+
+                        <div class="card-body text-center">
+
+                            <h4>
+
+                                {{ order.product.name }}
+
+                            </h4>
+
+                            <h5 class="text-success">
+
+                                ₹{{ order.price }}
+
+                            </h5>
+
+                            <p class="mb-1">
+
+                                Quantity :
+                                <strong>{{ order.quantity }}</strong>
+
+                            </p>
+
+                            <p>
+
+                                Total :
+                                <strong class="text-success">
+
+                                    ₹{{ order.total }}
+
+                                </strong>
+
+                            </p>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
-                <div class="col-md-8">
+                <!-- Order Details -->
 
-                    <table class="table table-bordered">
+                <div class="col-lg-8">
 
-                        <tr>
-                            <th width="35%">Invoice No</th>
-                            <td>{{ order.invoice_no }}</td>
-                        </tr>
+                    <div class="card border-primary shadow-sm mb-4">
 
-                        <tr>
-                            <th>Customer Username</th>
-                            <td>{{ order.user.username }}</td>
-                        </tr>
+                        <div class="card-header bg-primary text-white">
 
-                        <tr>
-                            <th>Full Name</th>
-                            <td>{{ order.full_name }}</td>
-                        </tr>
+                            <h5 class="mb-0">
 
-                        <tr>
-                            <th>Phone</th>
-                            <td>{{ order.phone }}</td>
-                        </tr>
+                                👤 Customer Information
 
-                        <tr>
-                            <th>Email</th>
-                            <td>{{ order.email }}</td>
-                        </tr>
+                            </h5>
 
-                        <tr>
-                            <th>Address</th>
-                            <td>{{ order.address }}</td>
-                        </tr>
+                        </div>
 
-                        <tr>
-                            <th>City</th>
-                            <td>{{ order.city }}</td>
-                        </tr>
+                        <div class="card-body">
 
-                        <tr>
-                            <th>State</th>
-                            <td>{{ order.state }}</td>
-                        </tr>
+                            <table class="table table-bordered">
 
-                        <tr>
-                            <th>Pincode</th>
-                            <td>{{ order.pincode }}</td>
-                        </tr>
+                                <tr>
 
-                        <tr>
-                            <th>Country</th>
-                            <td>{{ order.country }}</td>
-                        </tr>
+                                    <th width="35%">
 
-                        <tr>
-                            <th>Product</th>
-                            <td>{{ order.product.name }}</td>
-                        </tr>
+                                        Username
 
-                        <tr>
-                            <th>Price</th>
-                            <td>₹{{ order.price }}</td>
-                        </tr>
+                                    </th>
 
-                        <tr>
-                            <th>Quantity</th>
-                            <td>{{ order.quantity }}</td>
-                        </tr>
+                                    <td>
 
-                        <tr>
-                            <th>Total Amount</th>
-                            <td class="text-success fw-bold">
+                                        {{ order.user.username }}
 
-                                ₹{{ order.total }}
+                                    </td>
 
-                            </td>
-                        </tr>
+                                </tr>
 
-                        <tr>
+                                <tr>
 
-                            <th>Status</th>
+                                    <th>
 
-                            <td>
+                                        Full Name
 
-                                {% if order.status == "Pending" %}
+                                    </th>
 
-                                    <span class="badge bg-warning text-dark">
+                                    <td>
 
-                                        Pending
+                                        {{ order.full_name }}
 
-                                    </span>
+                                    </td>
 
-                                {% elif order.status == "Processing" %}
+                                </tr>
 
-                                    <span class="badge bg-primary">
+                                <tr>
 
-                                        Processing
+                                    <th>
 
-                                    </span>
+                                        Email
 
-                                {% elif order.status == "Shipped" %}
+                                    </th>
 
-                                    <span class="badge bg-info text-dark">
+                                    <td>
 
-                                        Shipped
+                                        {{ order.email }}
 
-                                    </span>
+                                    </td>
 
-                                {% elif order.status == "Out For Delivery" %}
+                                </tr>
 
-                                    <span class="badge bg-secondary text-white">
+                                <tr>
 
-                                        Out For Delivery
+                                    <th>
 
-                                    </span>
+                                        Phone
 
-                                {% elif order.status == "Delivered" %}
+                                    </th>
 
-                                    <span class="badge bg-success">
+                                    <td>
 
-                                        Delivered
+                                        {{ order.phone }}
 
-                                    </span>
+                                    </td>
 
-                                {% elif order.status == "Cancelled" %}
+                                </tr>
 
-                                    <span class="badge bg-danger">
+                                <tr>
 
-                                        Cancelled
+                                    <th>
 
-                                    </span>
+                                        Address
+
+                                    </th>
+
+                                    <td>
+
+                                        {{ order.address }}
+
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <th>
+
+                                        City
+
+                                    </th>
+
+                                    <td>
+
+                                        {{ order.city }}
+
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <th>
+
+                                        State
+
+                                    </th>
+
+                                    <td>
+
+                                        {{ order.state }}
+
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <th>
+
+                                        Pincode
+
+                                    </th>
+
+                                    <td>
+
+                                        {{ order.pincode }}
+
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <th>
+
+                                        Country
+
+                                    </th>
+
+                                    <td>
+
+                                        {{ order.country }}
+
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <th>
+
+                                        Order Date
+
+                                    </th>
+
+                                    <td>
+
+                                        {{ order.created_at|localtime|date:"d M Y h:i A" }}
+
+                                    </td>
+
+                                </tr>
+
+                                {% if order.cancel_reason %}
+
+                                <tr>
+
+                                    <th>
+
+                                        Cancel Reason
+
+                                    </th>
+
+                                    <td class="text-danger fw-bold">
+
+                                        {{ order.cancel_reason }}
+
+                                    </td>
+
+                                </tr>
 
                                 {% endif %}
 
-                            </td>
+                            </table>
 
-                        </tr>
-                        {% if order.cancel_reason %}
-                        <tr>
-                            <th>Cancel Reason</th>
-                            <td class="text-danger">
-                                {{ order.cancel_reason }}
-                            </td>
-                        </tr>
-                        {% endif %}
+                        </div>
 
-                        <tr>
+                    </div>
+                    <!-- Order Progress -->
 
-                            <th>Ordered On</th>
+                    <div class="card border-success shadow-sm mb-4">
 
-                            <td>
+                        <div class="card-header bg-success text-white">
 
-                                {{ order.created_at|localtime|date:"d M Y, h:i A" }}
+                            <h5 class="mb-0">
 
-                            </td>
+                                🚚 Order Progress
 
-                        </tr>
+                            </h5>
 
-                    </table>
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="row text-center g-3">
+
+                                <div class="col">
+
+                                    {% if order.status != "Cancelled" %}
+
+                                    <div class="alert alert-success py-2">
+
+                                        ✔<br>
+
+                                        Order Placed
+
+                                    </div>
+
+                                    {% else %}
+
+                                    <div class="alert alert-secondary py-2">
+
+                                        Order Placed
+
+                                    </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                                <div class="col">
+
+                                    {% if order.status == "Processing" or order.status == "Shipped" or order.status == "Out For Delivery" or order.status == "Delivered" %}
+
+                                    <div class="alert alert-success py-2">
+
+                                        ✔<br>
+
+                                        Processing
+
+                                    </div>
+
+                                    {% else %}
+
+                                    <div class="alert alert-secondary py-2">
+
+                                        Processing
+
+                                    </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                                <div class="col">
+
+                                    {% if order.status == "Shipped" or order.status == "Out For Delivery" or order.status == "Delivered" %}
+
+                                    <div class="alert alert-success py-2">
+
+                                        ✔<br>
+
+                                        Shipped
+
+                                    </div>
+
+                                    {% else %}
+
+                                    <div class="alert alert-secondary py-2">
+
+                                        Shipped
+
+                                    </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                                <div class="col">
+
+                                    {% if order.status == "Out For Delivery" or order.status == "Delivered" %}
+
+                                    <div class="alert alert-success py-2">
+
+                                        ✔<br>
+
+                                        Out For Delivery
+
+                                    </div>
+
+                                    {% else %}
+
+                                    <div class="alert alert-secondary py-2">
+
+                                        Out For Delivery
+
+                                    </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                                <div class="col">
+
+                                    {% if order.status == "Delivered" %}
+
+                                    <div class="alert alert-success py-2">
+
+                                        ✔<br>
+
+                                        Delivered
+
+                                    </div>
+
+                                    {% else %}
+
+                                    <div class="alert alert-secondary py-2">
+
+                                        Delivered
+
+                                    </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- Action Buttons -->
+
+                    <div class="card shadow-sm mb-4">
+
+                        <div class="card-header bg-dark text-white">
+
+                            <h5 class="mb-0">
+
+                                ⚡ Quick Actions
+
+                            </h5>
+
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="row g-3">
+
+                                <div class="col-md-4">
+
+                                    <a href="{% url 'order_detail' order.id %}"
+
+                                       class="btn btn-primary w-100">
+
+                                        <i class="bi bi-eye"></i>
+
+                                        Refresh
+
+                                    </a>
+
+                                </div>
+
+                                <div class="col-md-4">
+
+                                    <a href="{% url 'delete_order' order.id %}"
+
+                                       class="btn btn-danger w-100"
+
+                                       onclick="return confirm('Delete this order?')">
+
+                                        <i class="bi bi-trash"></i>
+
+                                        Delete Order
+
+                                    </a>
+
+                                </div>
+
+                                <div class="col-md-4">
+
+                                    <a href="{% url 'admin_orders' %}"
+
+                                       class="btn btn-secondary w-100">
+
+                                        <i class="bi bi-arrow-left"></i>
+
+                                        All Orders
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Update Status -->
+
+                    <div class="card shadow-lg border-0 mb-4">
+
+                        <div class="card-header bg-warning">
+
+                            <h4 class="mb-0">
+
+                                🔄 Update Order Status
+
+                            </h4>
+
+                        </div>
+
+                        <div class="card-body">
+
+                            <form method="POST">
+
+                                {% csrf_token %}
+
+                                <div class="mb-3">
+
+                                    {{ form.as_p }}
+
+                                </div>
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-success btn-lg">
+
+                                    <i class="bi bi-check-circle"></i>
+
+                                    Save Changes
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
@@ -216,40 +620,54 @@ Order Details
 
     </div>
 
-    <div class="card shadow mt-4">
-
-        <div class="card-header bg-primary text-white">
-
-            <h4 class="mb-0">
-
-                🔄 Update Order Status
-
-            </h4>
-
-        </div>
-
-        <div class="card-body">
-
-            <form method="POST">
-
-                {% csrf_token %}
-
-                {{ form.as_p }}
-
-                <button
-                    type="submit"
-                    class="btn btn-success">
-
-                    ✔ Update Status
-
-                </button>
-
-            </form>
-
-        </div>
-
-    </div>
-
 </div>
+
+<style>
+
+.table th{
+
+    background:#f8f9fa;
+
+    width:35%;
+
+}
+
+.table td{
+
+    vertical-align:middle;
+
+}
+
+.card{
+
+    border-radius:15px;
+
+}
+
+.card-header{
+
+    border-radius:15px 15px 0 0 !important;
+
+}
+
+.alert{
+
+    font-weight:600;
+
+}
+
+.btn{
+
+    border-radius:10px;
+
+}
+
+img{
+
+    border-radius:15px;
+
+}
+
+</style>
 
 {% endblock %}

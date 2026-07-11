@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load tz %}
 
 {% block title %}
 Track Order
@@ -6,266 +7,352 @@ Track Order
 
 {% block content %}
 
-<div class="container mt-5">
+<div class="container py-5">
 
-    <!-- Back Button -->
+    <div class="row justify-content-center">
 
-    <div class="mb-4">
+        <div class="col-lg-10">
 
-        <a href="javascript:history.back()"
-           class="btn btn-outline-dark">
+            <div class="d-flex justify-content-between mb-4">
 
-            <i class="bi bi-arrow-left"></i>
+                <a href="{% url 'my_orders' %}" class="btn btn-outline-dark">
 
-            Back
+                    <i class="bi bi-arrow-left"></i>
 
-        </a>
+                    Back
 
-    </div>
+                </a>
 
-    <div class="card shadow">
+                <a href="{% url 'home' %}" class="btn btn-success">
 
-        <div class="card-header bg-dark text-white">
+                    <i class="bi bi-house"></i>
 
-            <h3 class="mb-0">
+                    Home
 
-                📦 Order Tracking
-
-            </h3>
-
-        </div>
-
-        <div class="card-body">
-
-            <div class="row mb-4">
-
-                <div class="col-md-6">
-
-                    <h4>
-
-                        Invoice :
-                        <strong>{{ order.invoice_no }}</strong>
-
-                    </h4>
-
-                    <h5>
-
-                        Product :
-                        {{ order.product.name }}
-
-                    </h5>
-
-                </div>
-
-                <div class="col-md-6 text-md-end">
-
-                    <h5>
-
-                        Order Date
-
-                    </h5>
-
-                    <p>
-
-                        {{ order.created_at|localtime|date:"d M Y, h:i A" }}
-
-                    </p>
-
-                    {% if order.status == "Pending" %}
-
-                        <span class="badge bg-warning text-dark fs-6">
-
-                            Pending
-
-                        </span>
-
-                    {% elif order.status == "Processing" %}
-
-                        <span class="badge bg-primary fs-6">
-
-                            Processing
-
-                        </span>
-
-                    {% elif order.status == "Shipped" %}
-
-                        <span class="badge bg-info fs-6">
-
-                            Shipped
-
-                        </span>
-
-                    {% elif order.status == "Out For Delivery" %}
-
-                        <span class="badge bg-secondary fs-6">
-
-                            Out For Delivery
-
-                        </span>
-
-                    {% elif order.status == "Delivered" %}
-
-                        <span class="badge bg-success fs-6">
-
-                            Delivered
-
-                        </span>
-
-                    {% elif order.status == "Cancelled" %}
-
-                        <span class="badge bg-danger fs-6">
-
-                            Cancelled
-
-                        </span>
-
-                    {% endif %}
-
-                </div>
+                </a>
 
             </div>
 
-            <hr>
+            <div class="card shadow border-0">
 
-            <div class="ps-3">
+                <div class="card-header bg-dark text-white">
 
-                <!-- Order Placed -->
+                    <h3 class="mb-0">
 
-                <div class="mb-4">
+                        📍 Track Your Order
 
-                    {% if order.status != "Cancelled" %}
-
-                        <span class="badge bg-success p-2">
-
-                            ✔ Order Placed
-
-                        </span>
-
-                    {% else %}
-
-                        <span class="badge bg-secondary p-2">
-
-                            Order Placed
-
-                        </span>
-
-                    {% endif %}
+                    </h3>
 
                 </div>
 
-                <div class="ms-3 border-start ps-4">
+                <div class="card-body">
 
-                    <!-- Processing -->
+                    <div class="row mb-4">
+
+                        <div class="col-md-6">
+
+                            <h5>
+
+                                Invoice No
+
+                            </h5>
+
+                            <h4 class="text-primary">
+
+                                {{ order.invoice_no }}
+
+                            </h4>
+
+                            <hr>
+
+                            <h5>
+
+                                Product
+
+                            </h5>
+
+                            <p>
+
+                                {{ order.product.name }}
+
+                            </p>
+
+                            <h5>
+
+                                Quantity
+
+                            </h5>
+
+                            <p>
+
+                                {{ order.quantity }}
+
+                            </p>
+
+                            <h5>
+
+                                Total Amount
+
+                            </h5>
+
+                            <h4 class="text-success">
+
+                                ₹{{ order.total }}
+
+                            </h4>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <img src="{{ order.product.image.url }}"
+                                 class="img-fluid rounded shadow">
+
+                        </div>
+
+                    </div>
+
+                    <hr>
 
                     <div class="mb-4">
 
-                        {% if order.status == "Processing" or order.status == "Shipped" or order.status == "Out For Delivery" or order.status == "Delivered" %}
+                        <h5>
 
-                            <span class="badge bg-success p-2">
+                            Delivery Address
 
-                                ✔ Processing
+                        </h5>
+
+                        <p>
+
+                            {{ order.full_name }}
+
+                            <br>
+
+                            {{ order.address }}
+
+                            <br>
+
+                            {{ order.city }}
+
+                            ,
+
+                            {{ order.state }}
+
+                            -
+
+                            {{ order.pincode }}
+
+                            <br>
+
+                            {{ order.country }}
+
+                        </p>
+
+                    </div>
+
+                    <div class="mb-5">
+
+                        <h5>
+
+                            Order Date
+
+                        </h5>
+
+                        <p>
+
+                            {{ order.created_at|localtime|date:"d M Y h:i A" }}
+
+                        </p>
+
+                    </div>
+
+                    <hr>
+
+                    <h4 class="text-center mb-5">
+
+                        Order Progress
+
+                    </h4>
+
+                    <div class="track">
+
+                        <!-- Order Placed -->
+
+                        <div class="step active">
+
+                            <span class="icon">
+
+                                <i class="bi bi-bag-check-fill"></i>
 
                             </span>
 
-                        {% else %}
+                            <span class="text">
 
-                            <span class="badge bg-secondary p-2">
+                                Order Placed
+
+                            </span>
+
+                        </div>
+
+                        <!-- Processing -->
+
+                        <div class="step {% if order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Out For Delivery' or order.status == 'Delivered' %}active{% endif %}">
+
+                            <span class="icon">
+
+                                <i class="bi bi-gear-fill"></i>
+
+                            </span>
+
+                            <span class="text">
 
                                 Processing
 
                             </span>
 
-                        {% endif %}
+                        </div>
 
-                    </div>
+                        <!-- Shipped -->
 
-                    <!-- Shipped -->
+                        <div class="step {% if order.status == 'Shipped' or order.status == 'Out For Delivery' or order.status == 'Delivered' %}active{% endif %}">
 
-                    <div class="mb-4">
+                            <span class="icon">
 
-                        {% if order.status == "Shipped" or order.status == "Out For Delivery" or order.status == "Delivered" %}
-
-                            <span class="badge bg-success p-2">
-
-                                ✔ Shipped
+                                <i class="bi bi-truck"></i>
 
                             </span>
 
-                        {% else %}
-
-                            <span class="badge bg-secondary p-2">
+                            <span class="text">
 
                                 Shipped
 
                             </span>
 
-                        {% endif %}
+                        </div>
 
-                    </div>
+                        <!-- Out For Delivery -->
 
-                    <!-- Out For Delivery -->
+                        <div class="step {% if order.status == 'Out For Delivery' or order.status == 'Delivered' %}active{% endif %}">
 
-                    <div class="mb-4">
+                            <span class="icon">
 
-                        {% if order.status == "Out For Delivery" or order.status == "Delivered" %}
-
-                            <span class="badge bg-success p-2">
-
-                                ✔ Out For Delivery
+                                <i class="bi bi-box-seam"></i>
 
                             </span>
 
-                        {% else %}
-
-                            <span class="badge bg-secondary p-2">
+                            <span class="text">
 
                                 Out For Delivery
 
                             </span>
 
-                        {% endif %}
+                        </div>
 
-                    </div>
+                        <!-- Delivered -->
 
-                    <!-- Delivered -->
+                        <div class="step {% if order.status == 'Delivered' %}active{% endif %}">
 
-                    <div class="mb-4">
+                            <span class="icon">
 
-                        {% if order.status == "Delivered" %}
-
-                            <span class="badge bg-success p-2">
-
-                                ✔ Delivered
+                                <i class="bi bi-check-circle-fill"></i>
 
                             </span>
 
-                        {% else %}
-
-                            <span class="badge bg-secondary p-2">
+                            <span class="text">
 
                                 Delivered
 
                             </span>
 
-                        {% endif %}
+                        </div>
 
                     </div>
 
-                    <!-- Cancelled -->
-
                     {% if order.status == "Cancelled" %}
 
-                    <div class="mb-4">
+                    <div class="alert alert-danger mt-5 text-center">
 
-                        <span class="badge bg-danger p-2">
+                        <h4>
 
                             ❌ Order Cancelled
 
-                        </span>
+                        </h4>
+
+                        <p class="mb-0">
+
+                            {{ order.cancel_reason }}
+
+                        </p>
 
                     </div>
 
                     {% endif %}
+
+                    <div class="card mt-5 border-success">
+
+                        <div class="card-body text-center">
+
+                            <h4>
+
+                                Current Status
+
+                            </h4>
+
+                            <hr>
+
+                            {% if order.status == "Pending" %}
+
+                            <span class="badge bg-warning fs-5">
+
+                                Pending
+
+                            </span>
+
+                            {% elif order.status == "Processing" %}
+
+                            <span class="badge bg-primary fs-5">
+
+                                Processing
+
+                            </span>
+
+                            {% elif order.status == "Shipped" %}
+
+                            <span class="badge bg-info fs-5">
+
+                                Shipped
+
+                            </span>
+
+                            {% elif order.status == "Out For Delivery" %}
+
+                            <span class="badge bg-secondary fs-5">
+
+                                Out For Delivery
+
+                            </span>
+
+                            {% elif order.status == "Delivered" %}
+
+                            <span class="badge bg-success fs-5">
+
+                                Delivered
+
+                            </span>
+
+                            {% elif order.status == "Cancelled" %}
+
+                            <span class="badge bg-danger fs-5">
+
+                                Cancelled
+
+                            </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
 
                 </div>
 
@@ -276,5 +363,145 @@ Track Order
     </div>
 
 </div>
+
+<style>
+
+.track{
+
+display:flex;
+
+justify-content:space-between;
+
+position:relative;
+
+margin-top:60px;
+
+margin-bottom:30px;
+
+}
+
+.track::before{
+
+content:"";
+
+position:absolute;
+
+left:0;
+
+top:25px;
+
+width:100%;
+
+height:4px;
+
+background:#dee2e6;
+
+z-index:0;
+
+}
+
+.step{
+
+width:20%;
+
+text-align:center;
+
+position:relative;
+
+z-index:2;
+
+}
+
+.icon{
+
+width:55px;
+
+height:55px;
+
+background:#dee2e6;
+
+border-radius:50%;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+margin:auto;
+
+font-size:22px;
+
+font-weight:bold;
+
+color:#555;
+
+}
+
+.step.active .icon{
+
+background:#198754;
+
+color:#fff;
+
+}
+
+.text{
+
+display:block;
+
+margin-top:10px;
+
+font-weight:600;
+
+font-size:14px;
+
+}
+
+@media(max-width:768px){
+
+.track{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+}
+
+.track::before{
+
+display:none;
+
+}
+
+.step{
+
+width:100%;
+
+display:flex;
+
+align-items:center;
+
+margin-bottom:20px;
+
+}
+
+.icon{
+
+margin:0;
+
+margin-right:15px;
+
+}
+
+.text{
+
+margin-top:0;
+
+}
+
+}
+
+</style>
 
 {% endblock %}

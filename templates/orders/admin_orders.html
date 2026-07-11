@@ -14,7 +14,7 @@ Admin Orders
         <div>
 
             <h2 class="fw-bold">
-                📦 All Orders
+                📦 Manage All Orders
             </h2>
 
             <p class="text-muted">
@@ -26,19 +26,23 @@ Admin Orders
         <div>
 
             <a href="{% url 'dashboard' %}"
-               class="btn btn-dark">
+               class="btn btn-dark me-2">
 
                 Dashboard
+
+            </a>
+
+            <a href="javascript:history.back()"
+               class="btn btn-outline-secondary">
+
+                <i class="bi bi-arrow-left"></i>
+                Back
 
             </a>
 
         </div>
 
     </div>
-
-
-
-
 
     <!-- Search -->
 
@@ -48,23 +52,35 @@ Admin Orders
 
             <form method="GET">
 
-                <div class="row">
+                <div class="row g-2">
 
-                    <div class="col-md-10">
+                    <div class="col-md-5">
 
                         <input
                             type="text"
                             name="search"
                             class="form-control"
-                            placeholder="Search Invoice Number..."
-                            value="{{ search }}">
+                            placeholder="Invoice / Customer / Product"
+                            value="{{ request.GET.search }}">
 
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="col-md-4">
+
+                        <input
+                            type="date"
+                            name="date"
+                            class="form-control"
+                            value="{{ request.GET.date }}">
+
+                    </div>
+
+                    <div class="col-md-3 d-grid">
 
                         <button
-                            class="btn btn-primary w-100">
+                            class="btn btn-primary">
+
+                            <i class="bi bi-search"></i>
 
                             Search
 
@@ -80,11 +96,7 @@ Admin Orders
 
     </div>
 
-
-
-
-
-    <!-- Orders Table -->
+    <!-- Orders -->
 
     <div class="card shadow border-0">
 
@@ -100,7 +112,7 @@ Admin Orders
 
         <div class="table-responsive">
 
-            <table class="table table-hover align-middle mb-0">
+            <table class="table table-hover align-middle text-center mb-0">
 
                 <thead class="table-light">
 
@@ -120,7 +132,7 @@ Admin Orders
 
                         <th>Date</th>
 
-                        <th>Action</th>
+                        <th width="220">Action</th>
 
                     </tr>
 
@@ -194,7 +206,7 @@ Admin Orders
 
                         {% elif order.status == "Out For Delivery" %}
 
-                            <span class="badge bg-secondary text-white">
+                            <span class="badge bg-secondary">
 
                                 Out For Delivery
 
@@ -208,7 +220,7 @@ Admin Orders
 
                             </span>
 
-                        {% elif order.status == "Cancelled" %}
+                        {% else %}
 
                             <span class="badge bg-danger">
 
@@ -228,56 +240,55 @@ Admin Orders
 
                     <td>
 
-
                         <a href="{% url 'order_detail' order.id %}"
-                           class="btn btn-sm btn-primary">
+                           class="btn btn-sm btn-primary mb-1">
 
                             <i class="bi bi-eye"></i>
 
                             View
+                            </a>
 
-                        </a>
+<a href="{% url 'delete_order' order.id %}"
+   class="btn btn-sm btn-danger"
+   onclick="return confirm('Delete this order?');">
 
-                        <a href="{% url 'delete_order' order.id %}"
-                           class="btn btn-sm btn-danger"
-                           onclick="return confirm('Delete this order?')">
+    <i class="bi bi-trash"></i>
 
-                            <i class="bi bi-trash"></i>
+    Delete
 
-                            Delete
+</a>
 
-                        </a>
+</td>
 
-                    </td>
+</tr>
 
-                </tr>
+{% empty %}
 
-                {% empty %}
+<tr>
 
-                <tr>
+    <td colspan="8" class="text-center py-4">
 
-                    <td colspan="8" class="text-center py-4">
+        <h5 class="text-muted">
 
-                        <h5 class="text-muted">
+            No Orders Found
 
-                            No Orders Found
+        </h5>
 
-                        </h5>
+    </td>
 
-                    </td>
+</tr>
 
-                </tr>
+{% endfor %}
 
-                {% endfor %}
+</tbody>
 
-                </tbody>
+</table>
 
-            </table>
+</div>
 
-        </div>
-
-    </div>
+</div>
 
 </div>
 
 {% endblock %}
+                        

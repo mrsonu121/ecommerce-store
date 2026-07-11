@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load tz %}
 
 {% block title %}
 Admin Chat
@@ -10,9 +11,9 @@ Admin Chat
 
     <div class="row">
 
-        <!-- ================= Customer List ================= -->
+        <!-- ================= LEFT SIDE : CUSTOMER LIST ================= -->
 
-        <div class="col-md-3 mb-3">
+        <div class="col-lg-3 col-md-4 mb-3">
 
             <div class="card shadow">
 
@@ -31,18 +32,15 @@ Admin Chat
                     {% for user in users %}
 
                     <a href="?user={{ user.id }}"
+                       class="list-group-item list-group-item-action {% if selected_user and selected_user.id == user.id %}active{% endif %}">
 
-                       class="list-group-item list-group-item-action
+                        <div class="d-flex justify-content-between">
 
-                       {% if selected_user and selected_user.id == user.id %}
+                            <strong>
 
-                       active
+                                {{ user.username }}
 
-                       {% endif %}">
-
-                        <div class="fw-bold">
-
-                            {{ user.username }}
+                            </strong>
 
                         </div>
 
@@ -56,9 +54,9 @@ Admin Chat
 
                     {% empty %}
 
-                    <div class="p-3 text-center">
+                    <div class="p-4 text-center text-muted">
 
-                        No Customers
+                        No Customers Found
 
                     </div>
 
@@ -70,9 +68,9 @@ Admin Chat
 
         </div>
 
-        <!-- ================= Chat Section ================= -->
+        <!-- ================= RIGHT SIDE : CHAT ================= -->
 
-        <div class="col-md-9">
+        <div class="col-lg-9 col-md-8">
 
             {% if selected_user %}
 
@@ -80,12 +78,17 @@ Admin Chat
 
                 <h3>
 
-                    💬 Chat With {{ selected_user.username }}
+                    💬 Chat With
+
+                    <span class="text-primary">
+
+                        {{ selected_user.username }}
+
+                    </span>
 
                 </h3>
 
                 <a href="{% url 'dashboard' %}"
-
                    class="btn btn-dark">
 
                     ← Dashboard
@@ -98,7 +101,7 @@ Admin Chat
 
             <div class="alert alert-info">
 
-                Select a customer to start chatting.
+                Select any customer from the left panel.
 
             </div>
 
@@ -106,11 +109,14 @@ Admin Chat
 
             <div class="card shadow">
 
-                <div class="card-body"
-
-                     id="chat-box"
-
-                     style="height:500px; overflow-y:auto; background:#f8f9fa;">
+                <div
+                    class="card-body"
+                    id="chat-box"
+                    style="
+                        height:500px;
+                        overflow-y:auto;
+                        background:#f8f9fa;
+                    ">
 
                     {% if chats %}
 
@@ -130,7 +136,7 @@ Admin Chat
 
                                 <small class="text-muted">
 
-                                    {{ chat.created_at|localtime|date:"d M Y H:i" }}
+                                    {{ chat.created_at|date:"d M Y h:i A" }}
 
                                 </small>
 
@@ -150,7 +156,7 @@ Admin Chat
 
                                 <small class="text-muted">
 
-                                    {{ chat.created_at|localtime|date:"d M Y H:i" }}
+                                    {{ chat.created_at|date:"d M Y h:i A" }}
 
                                 </small>
 
@@ -164,13 +170,22 @@ Admin Chat
 
                     <div class="text-center mt-5 text-muted">
 
-                        No Messages Yet
+                        <h5>
+
+                            No Messages Yet
+
+                        </h5>
+
+                        <p>
+
+                            Start conversation with this customer.
+
+                        </p>
 
                     </div>
 
                     {% endif %}
-
-                </div>
+                                    </div>
 
                 {% if selected_user %}
 
@@ -183,19 +198,15 @@ Admin Chat
                         <div class="input-group">
 
                             <input
-
                                 type="text"
-
                                 name="message"
-
                                 class="form-control"
-
                                 placeholder="Type your reply..."
-
+                                autocomplete="off"
                                 required>
 
                             <button
-
+                                type="submit"
                                 class="btn btn-primary">
 
                                 <i class="bi bi-send-fill"></i>
@@ -222,13 +233,14 @@ Admin Chat
 
 <script>
 
-var chatBox = document.getElementById("chat-box");
+const chatBox = document.getElementById("chat-box");
 
-if(chatBox){
-
+if (chatBox) {
     chatBox.scrollTop = chatBox.scrollHeight;
-
 }
+
+// Auto refresh every 5 seconds
+
 
 </script>
 

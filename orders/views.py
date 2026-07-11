@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
+from django.db.models import Q
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
@@ -249,20 +250,43 @@ def my_orders(request):
 # Admin Orders
 # ==========================
 
+from django.db.models import Q
+from datetime import datetime
+
+
 @staff_member_required
 def admin_orders(request):
 
-    search = request.GET.get("search")
+    search = request.GET.get("search", "")
+    date = request.GET.get("date", "")
 
-    orders = Order.objects.all().order_by(
-        "-created_at"
-    )
+    orders = Order.objects.all().order_by("-created_at")
 
+    # Search by invoice, username, product
     if search:
 
         orders = orders.filter(
-            invoice_no__icontains=search
+
+            Q(invoice_no__icontains=search) |
+            Q(user__username__icontains=search) |
+            Q(product__name__icontains=search)
+
         )
+
+    # Search by date
+    if date:
+
+        try:
+
+            selected_date = datetime.strptime(date, "%Y-%m-%d").date()
+
+            orders = orders.filter(
+                created_at__date=selected_date
+            )
+
+        except ValueError:
+
+            pass
 
     return render(
 
@@ -273,13 +297,12 @@ def admin_orders(request):
         {
 
             "orders": orders,
-
-            "search": search
+            "search": search,
+            "date": date,
 
         }
 
     )
-
 
 # ==========================
 # Order Detail
